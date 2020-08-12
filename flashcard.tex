@@ -1,0 +1,48 @@
+\documentclass{article}
+\usepackage[a5paper,margin=1in,landscape]{geometry}
+\usepackage{hyperref}
+\pagenumbering{gobble}
+
+\newcommand{\helpline}{
+  \noindent\makebox[\linewidth]{\rule{0.9\paperwidth}{0.4pt}}
+}
+
+\newcommand{\cardcontent}{
+  \begin{center}
+    \helpline
+    \helpline
+    \helpline
+    \helpline
+    \helpline
+    \helpline
+    \helpline
+    \helpline
+    \helpline
+    \helpline
+    \helpline
+    \helpline
+    \helpline
+    \helpline
+    \helpline
+    \helpline
+    \helpline
+    \helpline
+  \end{center}
+}
+
+\begin{document}
+
+Index
+\hypertarget{Index}{idx}
+\hyperlink{card1:front}{Card 1}
+\clearpage
+
+\hypertarget{card1:front}{Card 1 front}\\
+\hyperlink{card1:back}{back} \\ 
+  \cardcontent
+\clearpage
+
+\hypertarget{card1:back}{Card 1 back}\\
+\hyperlink{card1:front}{front}
+
+\end{document}
