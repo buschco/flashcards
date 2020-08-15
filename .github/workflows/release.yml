@@ -7,15 +7,17 @@ on:
 name: Build and Release
 
 jobs:
-  build: Build latex
-  runs-on: tianon/latex
-  steps:
-    -name: Checkout code
-     uses: actions/checkout@v2
-    -name: Execute latexmk
-     run: |
-       latexmk -synctex=1 -interaction=nonstopmode -file-line-error -pdf
-    - name: Upload generated pdf
+  build: 
+    name: Build latex
+    runs-on: ubuntu-latest 
+    container: tianon/latex
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Execute latexmk
+        run: |
+          latexmk -synctex=1 -interaction=nonstopmode -file-line-error -pdf
+      - name: Upload generated pdf
         uses: actions/upload-artifact@v2
         with:
           name: flashcards 
