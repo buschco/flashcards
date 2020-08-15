@@ -1,48 +1,104 @@
 \documentclass{article}
-\usepackage[a5paper,margin=1in,landscape]{geometry}
-\usepackage{hyperref}
+\usepackage[hidelinks]{hyperref}
 \pagenumbering{gobble}
+\usepackage{pagecolor}
+\usepackage{multido}
+\usepackage{pgffor}
+\usepackage{amssymb}
+\usepackage{geometry}
+\usepackage{mdframed}
+\geometry{a5paper, landscape, margin=0.5cm}
+\setlength\parindent{0pt}
+
+\usepackage{xcolor}
+\definecolor{name}{model}{color-spec}
+\definecolor{bggray}{HTML}{1C1E26}
+\definecolor{fgwhite}{HTML}{6c6f93}
+\definecolor{dark}{HTML}{16161C}
+\pagecolor{bggray}
+\makeatletter
+\newcommand{\globalcolor}[1]{%
+  \color{#1}\global\let\default@color\current@color
+}
+\makeatother
+
+\AtBeginDocument{\globalcolor{fgwhite}}
 
 \newcommand{\helpline}{
-  \noindent\makebox[\linewidth]{\rule{0.9\paperwidth}{0.4pt}}
+  \textcolor{fgwhite}{\rule{0.9\paperwidth}{0.4pt}}
 }
 
+
+\newcommand{\linewithlength}[1]{
+  \textcolor{fgwhite}{\rule{#1}{0.4pt}}
+}
+
+
 \newcommand{\cardcontent}{
-  \begin{center}
-    \helpline
-    \helpline
-    \helpline
-    \helpline
-    \helpline
-    \helpline
-    \helpline
-    \helpline
-    \helpline
-    \helpline
-    \helpline
-    \helpline
-    \helpline
-    \helpline
-    \helpline
-    \helpline
-    \helpline
-    \helpline
-  \end{center}
+  \multido{}{27}{\helpline}
+}
+
+\newcommand{\card}[3]{
+  %front
+  \begin{mdframed}[
+    backgroundcolor=bggray,
+    align=center,
+    linecolor=dark,
+    linewidth=4pt,
+    innerleftmargin=0.02\paperwidth,
+    innerrightmargin=0.02\paperwidth,
+    innertopmargin=0.3cm,
+    innerbottommargin=0.3cm,
+  ]
+    \linewithlength{0.3\paperwidth}
+    \hspace{\fill}
+    \hypertarget{#1 front}{}
+    \hyperlink{#2 front}{\color{fgwhite}\huge$\leftarrow$} 
+    \hyperlink{#1 back}{\color{fgwhite}\huge$\curvearrowright$} 
+    \hyperlink{#3 front}{\color{fgwhite}\huge$\rightarrow$} 
+    \hspace{\fill}
+    \linewithlength{0.3\paperwidth} 
+    \cardcontent 
+    \begin{center}
+      \multido{}{25}{\color{fgwhite}\LARGE$\bigcirc \ $}
+    \end{center}
+  \end{mdframed}
+  \clearpage
+
+  % back
+  \begin{mdframed}[
+    backgroundcolor=bggray,
+    align=center,
+    linecolor=dark,
+    linewidth=4pt,
+    innerleftmargin=0.02\paperwidth,
+    innerrightmargin=0.02\paperwidth,
+    innertopmargin=0.3cm,
+    innerbottommargin=0.3cm,
+  ]
+    \linewithlength{0.3\paperwidth}
+    \hspace{\fill}
+    \hypertarget{#1 back}{}
+    \hyperlink{#2 front}{\color{fgwhite}\huge$\leftarrow$} 
+    \hyperlink{#1 front}{\color{fgwhite}\huge$\curvearrowleft$} 
+    \hyperlink{#3 front}{\color{fgwhite}\huge$\rightarrow$} 
+    \hspace{\fill}
+    \linewithlength{0.3\paperwidth} 
+    \cardcontent 
+    \begin{center}
+      \multido{}{25}{\color{fgwhite}\LARGE$\bigcirc \ $}
+    \end{center}
+  \end{mdframed}
+  \clearpage
 }
 
 \begin{document}
+\card{0}{0}{1}
+\def\lastx{1}
+\foreach \x[count=\xi from 0,remember=\x as \lastx] in {2,...,30} {
+    %this is \lastx \  prev is  \xi \ next is \x \par
+    \card{\lastx}{\xi}{\x}
+}
 
-Index
-\hypertarget{Index}{idx}
-\hyperlink{card1:front}{Card 1}
-\clearpage
-
-\hypertarget{card1:front}{Card 1 front}\\
-\hyperlink{card1:back}{back} \\ 
-  \cardcontent
-\clearpage
-
-\hypertarget{card1:back}{Card 1 back}\\
-\hyperlink{card1:front}{front}
 
 \end{document}
