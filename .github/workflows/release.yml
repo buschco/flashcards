@@ -20,8 +20,8 @@ jobs:
       - name: Upload generated pdf
         uses: actions/upload-artifact@v2
         with:
-          name: flashcards 
-          path: flashcards.pdf
+          name: flashcard
+          path: flashcard.pdf
   release:
     needs: build 
     name: Create Release
@@ -30,7 +30,7 @@ jobs:
       - name: Download generated pdf from build step 
         uses: actions/download-artifact@v2
         with:
-          name: flashcards 
+          name: flashcard
       - name: Create Release
         id: create-release
         uses: actions/create-release@v1
