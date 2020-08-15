@@ -2,16 +2,17 @@
 \usepackage[hidelinks]{hyperref}
 \pagenumbering{gobble}
 \usepackage{pagecolor}
+\usepackage{background}
 \usepackage{multido}
 \usepackage{pgffor}
 \usepackage{amssymb}
 \usepackage{geometry}
-\usepackage{mdframed}
-\geometry{a5paper, landscape, margin=0.5cm}
-\setlength\parindent{0pt}
-
 \usepackage{xcolor}
-\definecolor{name}{model}{color-spec}
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\geometry{a5paper, landscape, margin=1cm}
+\setlength\parindent{0pt}
+\hypersetup{pageanchor=false}
 \definecolor{bggray}{HTML}{1C1E26}
 \definecolor{fgwhite}{HTML}{6c6f93}
 \definecolor{dark}{HTML}{16161C}
@@ -25,7 +26,7 @@
 \AtBeginDocument{\globalcolor{fgwhite}}
 
 \newcommand{\helpline}{
-  \textcolor{fgwhite}{\rule{0.9\paperwidth}{0.4pt}}
+  \textcolor{fgwhite}{\rule{\textwidth}{0.4pt}} \\
 }
 
 
@@ -40,16 +41,6 @@
 
 \newcommand{\card}[3]{
   %front
-  \begin{mdframed}[
-    backgroundcolor=bggray,
-    align=center,
-    linecolor=dark,
-    linewidth=4pt,
-    innerleftmargin=0.02\paperwidth,
-    innerrightmargin=0.02\paperwidth,
-    innertopmargin=0.3cm,
-    innerbottommargin=0.3cm,
-  ]
     \linewithlength{0.3\paperwidth}
     \hspace{\fill}
     \hypertarget{#1 front}{}
@@ -62,20 +53,9 @@
     \begin{center}
       \multido{}{25}{\color{fgwhite}\LARGE$\bigcirc \ $}
     \end{center}
-  \end{mdframed}
-  \clearpage
+    \clearpage
 
   % back
-  \begin{mdframed}[
-    backgroundcolor=bggray,
-    align=center,
-    linecolor=dark,
-    linewidth=4pt,
-    innerleftmargin=0.02\paperwidth,
-    innerrightmargin=0.02\paperwidth,
-    innertopmargin=0.3cm,
-    innerbottommargin=0.3cm,
-  ]
     \linewithlength{0.3\paperwidth}
     \hspace{\fill}
     \hypertarget{#1 back}{}
@@ -88,8 +68,19 @@
     \begin{center}
       \multido{}{25}{\color{fgwhite}\LARGE$\bigcirc \ $}
     \end{center}
-  \end{mdframed}
-  \clearpage
+    \clearpage
+}
+
+\SetBgScale{1}
+\SetBgAngle{0}
+\SetBgColor{bggray}
+\SetBgContents{
+  \begin{tikzpicture}[overlay,remember picture]
+    \draw [draw =dark ,xshift=4mm,line width=4pt,rounded corners=1pt]
+          ($ (current page.north west) + (.5cm,-.5cm) $)
+          rectangle
+          ($ (current page.south east) + (-.5cm,.5cm) $);
+  \end{tikzpicture}
 }
 
 \begin{document}
