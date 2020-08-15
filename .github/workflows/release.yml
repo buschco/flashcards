@@ -1,0 +1,52 @@
+on:
+  push:
+    # Sequence of patterns matched against refs/tags
+    tags:
+      - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
+
+name: Build and Release
+
+jobs:
+  build: Build latex
+  runs-on: tianon/latex
+  steps:
+    -name: Checkout code
+     uses: actions/checkout@v2
+    -name: Execute latexmk
+     run: |
+       latexmk -synctex=1 -interaction=nonstopmode -file-line-error -pdf
+    - name: Upload generated pdf
+        uses: actions/upload-artifact@v2
+        with:
+          name: flashcards 
+          path: flashcards.pdf
+  release:
+    needs: build 
+    name: Create Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download generated pdf from build step 
+        uses: actions/download-artifact@v2
+        with:
+          name: flashcards 
+      - name: Create Release
+        id: create-release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          body: check commits 🙃
+          draft: false
+          prerelease: false 
+      - name: Upload Release Asset
+        id: upload-release-asset 
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} 
+          asset_path: ./my-artifact.zip
+          asset_name: my-artifact.zip
+          asset_content_type: application/zip
