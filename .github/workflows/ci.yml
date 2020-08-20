@@ -3,7 +3,7 @@ on:
     branch:
       - master
 
-name: Build and Release
+name: Build 
 
 jobs:
   build: 
