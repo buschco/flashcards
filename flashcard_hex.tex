@@ -1,0 +1,137 @@
+\documentclass{article}
+\usepackage[hidelinks]{hyperref}
+\pagenumbering{gobble}
+\usepackage{background}
+\usepackage{multido}
+\usepackage{pgffor}
+\usepackage{amssymb}
+\usepackage{geometry}
+\usepackage{xcolor}
+\usepackage{pagecolor}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric}
+\usetikzlibrary{calc}
+\geometry{a5paper, landscape, margin=1cm}
+\setlength\parindent{0pt}
+\hypersetup{pageanchor=false}
+\definecolor{bggray}{HTML}{1C1E26}
+\definecolor{fgwhite}{HTML}{6c6f93}
+\definecolor{dark}{HTML}{16161C}
+\pagecolor{bggray}
+\makeatletter
+\newcommand{\globalcolor}[1]{%
+  \color{#1}\global\let\default@color\current@color
+}
+\makeatother
+
+\AtBeginDocument{\globalcolor{fgwhite}}
+
+\newcommand{\linewithlength}[1]{
+  \textcolor{fgwhite}{\rule{#1}{0.4pt}}
+}
+
+% \def\hexagonsize{0.5cm}
+% \pgfdeclarepatternformonly{hexagons}% name
+%   {\pgfpointorigin}% lower left
+%   {\pgfpoint{3*\hexagonsize}{0.866025*2*\hexagonsize}}%  upper right
+%   {\pgfpoint{3*\hexagonsize}{0.866025*2*\hexagonsize}}%  tile size
+%   {% shape description
+%    \pgfsetlinewidth{0.4pt}
+%    \pgfsetstrokecolor{fgwhite}
+%    \pgftransformshift{\pgfpoint{0mm}{0.866025*\hexagonsize}}
+%    \pgfpathmoveto{\pgfpoint{0mm}{0mm}}
+%    \pgfpathlineto{\pgfpoint{0.5*\hexagonsize}{0mm}}
+%    \pgfpathlineto{\pgfpoint{\hexagonsize}{-0.866025*\hexagonsize}}
+%    \pgfpathlineto{\pgfpoint{2*\hexagonsize}{-0.866025*\hexagonsize}}
+%    \pgfpathlineto{\pgfpoint{2.5*\hexagonsize}{0mm}}
+%    \pgfpathlineto{\pgfpoint{3*\hexagonsize+0.2mm}{0mm}}
+%    \pgfpathmoveto{\pgfpoint{0.5*\hexagonsize}{0mm}}
+%    \pgfpathlineto{\pgfpoint{\hexagonsize}{0.866025*\hexagonsize}}
+%    \pgfpathlineto{\pgfpoint{2*\hexagonsize}{0.866025*\hexagonsize}}
+%    \pgfpathlineto{\pgfpoint{2.5*\hexagonsize}{0mm}}
+%    \color{fgwhite}
+%    %\pgfsetstrokecolor{fgwhite}
+%    \pgfusepath{stroke}
+%   }
+
+\newcommand{\cardcontent}{
+%
+% x=3*(minimum size)/2
+% x=\sqrt{3/4}*(minimum size)/2
+%
+\begin{tikzpicture}[x=7.5mm,y=4.34mm]
+  % some styles
+  \tikzset{
+      box/.style={
+      regular polygon,
+      regular polygon sides=6,
+      minimum size=10mm,
+      inner sep=0mm,
+      outer sep=0mm,
+      rotate=0,
+      draw
+    }
+  }
+  \foreach \i in {0,...,8} 
+  \foreach \j in {0,...,8} {
+      \node[box] at (2*\i,2*\j) {};
+      \node[box] at (2*\i+1,2*\j+1) {};
+    }
+  \end{tikzpicture}
+}
+
+\newcommand{\card}[3]{
+  %front
+    \linewithlength{0.3\paperwidth}
+    \hspace{\fill}
+    \hypertarget{#1 front}{}
+    \hyperlink{#2 front}{\color{fgwhite}\huge$\leftarrow$} 
+    \hyperlink{#1 back}{\color{fgwhite}\huge$\curvearrowright$} 
+    \hyperlink{#3 front}{\color{fgwhite}\huge$\rightarrow$} 
+    \hspace{\fill}
+    \linewithlength{0.3\paperwidth} 
+    \cardcontent 
+    \begin{center}
+      \multido{}{25}{\color{fgwhite}\LARGE$\bigcirc \ $}
+    \end{center}
+    \clearpage
+
+  % back
+    \linewithlength{0.3\paperwidth}
+    \hspace{\fill}
+    \hypertarget{#1 back}{}
+    \hyperlink{#2 front}{\color{fgwhite}\huge$\leftarrow$} 
+    \hyperlink{#1 front}{\color{fgwhite}\huge$\curvearrowleft$} 
+    \hyperlink{#3 front}{\color{fgwhite}\huge$\rightarrow$} 
+    \hspace{\fill}
+    \linewithlength{0.3\paperwidth} 
+    \cardcontent 
+    \begin{center}
+      \multido{}{25}{\color{fgwhite}\LARGE$\bigcirc \ $}
+    \end{center}
+    \clearpage
+}
+
+\SetBgScale{1}
+\SetBgAngle{0}
+\SetBgColor{bggray}
+\SetBgContents{
+  \begin{tikzpicture}[overlay,remember picture]
+    \draw [draw =dark ,xshift=4mm,line width=4pt,rounded corners=1pt]
+          ($ (current page.north west) + (.5cm,-.5cm) $)
+          rectangle
+          ($ (current page.south east) + (-.5cm,.5cm) $);
+  \end{tikzpicture}
+}
+
+\begin{document}
+\card{0}{0}{1}
+\def\lastx{1}
+\foreach \x[count=\xi from 0,remember=\x as \lastx] in {2,...,4} {
+    %this is \lastx \  prev is  \xi \ next is \x \par
+    \card{\lastx}{\xi}{\x}
+}
+
+
+\end{document}
+
